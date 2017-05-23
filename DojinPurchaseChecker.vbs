@@ -81,11 +81,15 @@ Sub main()
 	'* File output
 	'******************************
 
-	'Update purchase checklist file
-	Write_File PURCHASE_NO_FILE, new_no_list
-
-	'Update purchasable list
-	Add_File PURCHASE_YES_FILE, new_yes_list
+	If new_yes_ct <> 0 then
+		'Update purchase checklist file
+		Write_File PURCHASE_NO_FILE, new_no_list
+		
+		'Update purchasable list
+		Add_File PURCHASE_YES_FILE, new_yes_list
+		
+		MsgBox( "Found new purchasable items" )
+	End If
 
 End Sub
 
