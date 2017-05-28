@@ -9,10 +9,12 @@ Const PURCHASE_YES_FILE = "Purchase_YES_list.txt"
 '******************************
 '* 'Checkable doujin site
 '******************************
-Const SITE_URL_TORA = "http://www.toranoana.jp/"
+Const SITE_URL_TORA  = "http://www.toranoana.jp/"
+Const SITE_URL_MELON = "https://www.melonbooks.co.jp/"
 
 Const SITE_NO_OTHER = 0
 Const SITE_NO_TORA  = 1
+Const SITE_NO_MELON = 2
 
 
 '******************************
@@ -254,9 +256,14 @@ Sub Check_URL( url, site_no )
 
 	site_no = SITE_NO_OTHER
 
-	if Instr( url, SITE_URL_TORA ) > 0 then
+	If Instr( url, SITE_URL_TORA ) > 0 then
 		'Toranoana
 		site_no = SITE_NO_TORA
+
+	ElseIf Instr( url, SITE_URL_MELON ) > 0 then
+		'Melonbooks
+		site_no = SITE_NO_MELON
+
 	End If
 
 End Sub	
@@ -286,6 +293,18 @@ Sub Age_Limit_Break( ie, site_no )
 		Next
 		waitIE ie
 
+
+	ElseIf site_no = SITE_NO_MELON then
+		'Melonbooks
+
+		Set elem_adultcheck = ie.Document.getElementsByClassName("f_left yes")
+		If elem_adultcheck.Length > 0 then
+
+			'age confirmation page
+			elem_adultcheck(0).Click
+			waitIE ie
+
+		End If
 	End If
 
 End Sub
@@ -301,9 +320,12 @@ Sub Check_Sale( ie , site_no , sale_result)
 
 	If site_no = SITE_NO_TORA then
 		'Toranoana
-
 		Check_Sale_Tora ie, sale_result
-		
+
+	ElseIf site_no = SITE_NO_MELON then
+		'Melonbooks
+		Check_Sale_Melon ie, sale_result
+
 	End If
 End Sub
 
@@ -364,6 +386,49 @@ Sub Check_Sale_Tora( ie, sale_result)
 		'close the window
 		pop_ie.Quit
 	End If
+End Sub
+
+
+
+'******************************
+'* Sales check of Melonbooks
+'******************************
+Sub Check_Sale_Melon( ie, sale_result)
+
+	sale_result = 0
+
+	'******************************
+	'* Sales check
+	'******************************
+
+	'Purchase button
+	Set elem_tag_cart = ie.Document.getElementsByClassName("submit cart tag_cart_main1")
+	If elem_tag_cart.Length > 0 then
+		sale_result = 1
+		Exit Sub
+	End If
+
+	Set elem_tag_cart = ie.Document.getElementsByClassName("submit cart tag_cart_main2")
+	If elem_tag_cart.Length > 0 then
+		sale_result = 1
+		Exit Sub
+	End If
+
+
+	'Reserve button
+	Set elem_tag_cart = ie.Document.getElementsByClassName("submit reserve tag_cart_main1")
+	If elem_tag_cart.Length > 0 then
+		sale_result = 1
+		Exit Sub
+	End If
+
+	Set elem_tag_cart = ie.Document.getElementsByClassName("submit reserve tag_cart_main2")
+	If elem_tag_cart.Length > 0 then
+		sale_result = 1
+		Exit Sub
+	End If
+
+
 End Sub
 
 

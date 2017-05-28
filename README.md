@@ -16,6 +16,7 @@ DojinPurchaseChecker
 ## 対応する通販サイト
 
 - [とらのあな](http://www.toranoana.jp/)
+- [メロンブックス](https://www.melonbooks.co.jp/)
 
 
 ## 製作者
